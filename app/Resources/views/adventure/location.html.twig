@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block include %}
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+{% endblock %}
+{% block body %}
+{{ form_start(form) }}
+
+    {{ form_row(form.name)}}
+    {{ form_row(form.description)}}
+
+    {# store the prototype on the data-prototype attribute #}
+    <ul id="npcs-fields-list"
+        data-prototype="{{ form_widget(form.npcs.vars.prototype)|e }}">
+    {% for npcField in form.npcs %}
+        <li>
+            {{ form_errors(npcField) }}
+            {{ form_widget(npcField) }}
+        </li>
+    {% endfor %}
+    </ul>
+
+    <a href="#" id="add-another-npc">Add another npc</a>
+
+    <ul id="objects-fields-list"
+        data-prototype="{{ form_widget(form.objects.vars.prototype)|e }}">
+    {% for objectField in form.objects %}
+        <li>
+            {{ form_errors(objectField) }}
+            {{ form_widget(objectField) }}
+        </li>
+    {% endfor %}
+    </ul>
+
+    <a href="#" id="add-another-object">Add another object</a>
+
+    <input type="submit" value="Create location"></input>
+
+{{ form_end(form) }}
+
+<script type="text/javascript">
+    // keep track of how many fields have been rendered
+    var objectCount = '{{ form.objects|length }}';
+
+    jQuery(document).ready(function() {
+        jQuery('#add-another-object').click(function(e) {
+            e.preventDefault();
+
+            var objectList = jQuery('#objects-fields-list');
+
+            // grab the prototype template
+            var newWidget = objectList.attr('data-prototype');
+            // replace the "__name__" used in the id and name of the prototype
+            // with a number that's unique to your emails
+            // end name attribute looks like name="contact[emails][2]"
+            newWidget = newWidget.replace(/__name__/g, objectCount);
+            objectCount++;
+
+            // create a new list element and add it to the list
+            var newLi = jQuery('<li></li>').html(newWidget);
+            newLi.appendTo(objectList);
+        });
+        jQuery('#add-another-object').click(function(e) {
+            e.preventDefault();
+
+            var objectList = jQuery('#objects-fields-list');
+
+            // grab the prototype template
+            var newWidget = objectList.attr('data-prototype');
+            // replace the "__name__" used in the id and name of the prototype
+            // with a number that's unique to your emails
+            // end name attribute looks like name="contact[emails][2]"
+            newWidget = newWidget.replace(/__name__/g, objectCount);
+            objectCount++;
+
+            // create a new list element and add it to the list
+            var newLi = jQuery('<li></li>').html(newWidget);
+            newLi.appendTo(objectList);
+        });
+    })
+</script>
+{% endblock %}
+

@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block include %}
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+{% endblock %}
+{% block body %}
+{{ form_start(form) }}
+
+    {{ form_row(form.name)}}
+    {{ form_row(form.description)}}
+    {{ form_row(form.descriptionFromAfar)}}
+    {# store the prototype on the data-prototype attribute #}
+    <ul id="answers-fields-list"
+        data-prototype="{{ form_widget(form.questions.vars.prototype)|e}} - {{form_widget(form.answers.vars.prototype)|e }}">
+    {% for answerField in form.answers %}
+        {% for questionField in form.questions %}
+        
+        <li>
+            {{ form_errors(answerField) }}
+            {{ form_errors(questionField) }}
+            {{ form_widget(questionField) }} -  {{ form_widget(answerField) }}
+        </li>
+        {% endfor %}
+    {% endfor %}
+    </ul>
+
+    <a href="#" id="add-another-answer">Add another answer</a>
+
+    {# ... #}
+{{ form_end(form) }}
+
+<script type="text/javascript">
+    // keep track of how many fields have been rendered
+    var answerCount = '{{ form.answers|length }}';
+
+    jQuery(document).ready(function() {
+        jQuery('#add-another-answer').click(function(e) {
+            e.preventDefault();
+
+            var answerList = jQuery('#answers-fields-list');
+
+            // grab the prototype template
+            var newWidget = answerList.attr('data-prototype');
+            // replace the "__name__" used in the id and name of the prototype
+            // with a number that's unique to your emails
+            // end name attribute looks like name="contact[emails][2]"
+            newWidget = newWidget.replace(/__name__/g, answerCount);
+            answerCount++;
+
+            // create a new list element and add it to the list
+            var newLi = jQuery('<li></li>').html(newWidget);
+            newLi.appendTo(answerList);
+        });
+    })
+</script>
+{% endblock %}
+

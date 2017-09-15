@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class='statusbar'>
+    <table width=100%>
+        <tr>
+            <td align=left width=33%>
+                <h3>{{ location | raw }}</h3>
+            </td>
+            <td align=center width=33%>
+                <h3>Rest Adventure</h3>
+            </td>
+            <td align=right width=33%>
+                <h3> Tour n°{{ turns | raw }} </h3>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<table width=100%>
+    <tr valign=top>
+        <td align=left width=75%>
+
+            <div class='descpane'>
+                {{ description | raw }}
+            </div>
+
+
+            <div class='verbpane'>
+                <table align=center cellpadding=5>
+                    <tr>
+                    {% if verbs is defined %}
+                    {% for verb in verbs %}
+                        <td> {{ verb | raw }} </td>
+                    {% endfor %}
+                    {% endif %}
+                    </tr>
+                </table>
+            </div>
+
+
+        </td><td align=right><table><tr valign=top><td><div class='sidebar'>
+                            <a href="/about">About</a><br>
+                            <a href="/quit">Quit</a><br>
+                            <a href="/restart">Restart</a><br>
+
+                        </div></td></tr><tr valign=bottom><td><div class='sideinv'>
+
+            <h3>Inventaire</h3>
+                {% if inventory is defined %}
+                    {% for item in inventory %}
+                        {{ item | raw }}
+                    {% endfor%}
+                {% else %}
+                    <h4>Votre inventaire est vide.<h4>
+                {% endif %}
+</div></td></tr></table></table>
+
+{% endblock %}
+
